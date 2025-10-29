@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import kokoImage from "@/assets/menu-koko.jpg";
+import smoothiesImage from "@/assets/menu-smoothies.jpg";
+import sandwichImage from "@/assets/menu-sandwich.jpg";
 
 const Menu = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -23,10 +26,14 @@ const Menu = () => {
       left: {
         image: true,
         content: (
-          <div className="h-full flex items-center justify-center p-8 bg-muted/30">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🌾</div>
-              <p className="text-lg text-muted-foreground">Locally sourced ingredients</p>
+          <div className="h-full relative overflow-hidden">
+            <img 
+              src={kokoImage} 
+              alt="Millet porridge and Tombrown" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+              <p className="text-lg text-white font-medium">Locally sourced ingredients</p>
             </div>
           </div>
         ),
@@ -65,10 +72,14 @@ const Menu = () => {
       right: {
         image: true,
         content: (
-          <div className="h-full flex items-center justify-center p-8 bg-muted/30">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🥤</div>
-              <p className="text-lg text-muted-foreground">Fresh smoothies daily</p>
+          <div className="h-full relative overflow-hidden">
+            <img 
+              src={smoothiesImage} 
+              alt="Fresh smoothies" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+              <p className="text-lg text-white font-medium">Fresh smoothies daily</p>
             </div>
           </div>
         ),
@@ -79,10 +90,14 @@ const Menu = () => {
       left: {
         image: true,
         content: (
-          <div className="h-full flex items-center justify-center p-8 bg-muted/30">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🥪</div>
-              <p className="text-lg text-muted-foreground">Hearty sandwiches</p>
+          <div className="h-full relative overflow-hidden">
+            <img 
+              src={sandwichImage} 
+              alt="Egg and avocado sandwich" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+              <p className="text-lg text-white font-medium">Hearty sandwiches</p>
             </div>
           </div>
         ),

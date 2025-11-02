@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -8,6 +9,7 @@ import sandwichImage from "@/assets/menu-sandwich.jpg";
 
 const Menu = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
 
   const menuPages = [
     {
@@ -43,12 +45,12 @@ const Menu = () => {
           {
             name: "Millet Delight (Koko)",
             description: "Creamy millet porridge with a coconut milk twist",
-            price: "GH₵15",
+            price: "GH₵22",
           },
           {
             name: "Tombrown Classic",
             description: "Smooth roasted corn porridge with a touch of milk and spice",
-            price: "GH₵15",
+            price: "GH₵18",
           },
         ],
       },
@@ -60,12 +62,12 @@ const Menu = () => {
           {
             name: "Morning Glow Smoothie",
             description: "Banana, oats, and honey blend for natural energy",
-            price: "GH₵20",
+            price: "GH₵35",
           },
           {
             name: "Berry Burst Smoothie",
             description: "Strawberries, yogurt, and a hint of vanilla",
-            price: "GH₵22",
+            price: "GH₵30",
           },
         ],
       },
@@ -97,7 +99,7 @@ const Menu = () => {
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-              <p className="text-lg text-white font-medium">Hearty sandwiches</p>
+              <p className="text-lg text-white font-medium">Filling sandwiches</p>
             </div>
           </div>
         ),
@@ -129,7 +131,7 @@ const Menu = () => {
           </p>
           <div className="flex space-x-4">
             <Button variant="cta" size="lg">Order Now</Button>
-            <Button variant="outline" size="lg">Contact Us</Button>
+            <Button variant="outline" size="lg" onClick={() => navigate("/contact")}>Contact Us</Button>
           </div>
         </div>
       ),

@@ -19,13 +19,13 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-24">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <img 
-              src="https://placehold.co/100x40/5C3A21/FFFFFF?text=SEY+GOOD+MORNING&font=raleway" 
-              alt="Sey Good Morning Logo" 
-              className="h-10 rounded-lg"
+          <Link to="/" className="flex items-center space-x-3">
+            <img
+              src="/logo.jpg"
+              alt="Sey Good Morning Logo"
+              className="h-[4.5rem] rounded-lg"
             />
           </Link>
 
@@ -35,7 +35,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-smooth ${
+                className={`text-lg font-medium transition-smooth ${
                   isActive(link.path)
                     ? "text-primary"
                     : "text-foreground hover:text-primary"
@@ -49,10 +49,10 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary transition-smooth"
+            className="md:hidden p-4 text-foreground hover:text-primary transition-smooth"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={36} /> : <Menu size={36} />}
           </button>
         </div>
 
@@ -64,7 +64,7 @@ const Navbar = () => {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`block py-2 px-4 rounded-lg text-sm font-medium transition-smooth ${
+                className={`block py-3 px-5 rounded-lg text-lg font-medium transition-smooth ${
                   isActive(link.path)
                     ? "bg-muted text-primary"
                     : "text-foreground hover:bg-muted"

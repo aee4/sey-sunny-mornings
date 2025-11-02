@@ -11,12 +11,12 @@ const Home = () => {
     {
       name: "Millet Delight (Koko)",
       description: "Creamy millet porridge with a coconut milk twist",
-      price: "GH₵15",
+      price: "GH₵22",
     },
     {
       name: "Morning Glow Smoothie",
       description: "Banana, oats, and honey blend for natural energy",
-      price: "GH₵20",
+      price: "GH₵18",
     },
     {
       name: "Egg & Avocado Sandwich",

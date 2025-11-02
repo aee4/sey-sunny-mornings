@@ -28,37 +28,37 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="hero-gradient py-20 px-4">
+      <section className="hero-gradient py-12 md:py-20 px-4">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
                 Start Smart. <br />
                 Eat Fresh. <br />
                 <span className="text-primary">Sey Good Morning.</span>
               </h1>
-              <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8">
                 Fresh, healthy, and affordable morning meals delivered to your doorstep in Accra.
               </p>
               
               {/* Offer Cards */}
-              <div className="space-y-4 mb-8">
-                <Card className="p-4 bg-muted/50 border-secondary/20 card-shadow">
-                  <div className="flex items-start space-x-3">
-                    <Tag className="text-secondary mt-1" size={20} />
-                    <div>
-                      <p className="font-semibold text-primary">Use code <span className="text-secondary">GOODMORNING10</span></p>
-                      <p className="text-sm text-muted-foreground">Get 10% off your first order</p>
+              <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+                <Card className="p-3 md:p-4 bg-muted/50 border-secondary/20 card-shadow">
+                  <div className="flex items-start space-x-2 md:space-x-3">
+                    <Tag className="text-secondary mt-1 flex-shrink-0" size={18} />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm md:text-base text-primary">Use code <span className="text-secondary">GOODMORNING10</span></p>
+                      <p className="text-xs md:text-sm text-muted-foreground">Get 10% off your first order</p>
                     </div>
                   </div>
                 </Card>
                 
-                <Card className="p-4 bg-muted/50 border-secondary/20 card-shadow">
-                  <div className="flex items-start space-x-3">
-                    <Gift className="text-secondary mt-1" size={20} />
-                    <div>
-                      <p className="font-semibold text-primary">Join the Good Morning Club</p>
-                      <p className="text-sm text-muted-foreground">Order 6 breakfasts, get the 7th free!</p>
+                <Card className="p-3 md:p-4 bg-muted/50 border-secondary/20 card-shadow">
+                  <div className="flex items-start space-x-2 md:space-x-3">
+                    <Gift className="text-secondary mt-1 flex-shrink-0" size={18} />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm md:text-base text-primary">Join the Good Morning Club</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">Order 6 breakfasts, get the 7th free!</p>
                     </div>
                   </div>
                 </Card>
@@ -85,23 +85,23 @@ const Home = () => {
       </section>
 
       {/* Featured Items */}
-      <section className="py-20 px-4">
+      <section className="py-12 md:py-20 px-4">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Popular Breakfast Items</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12">Popular Breakfast Items</h2>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {featuredItems.map((item, index) => (
               <Card 
                 key={index} 
-                className="p-6 hover:scale-105 transition-smooth card-shadow cursor-pointer"
+                className="p-4 md:p-6 hover:scale-105 transition-smooth card-shadow cursor-pointer"
                 onClick={() => navigate("/menu")}
               >
-                <h3 className="text-xl font-semibold mb-2 text-primary">{item.name}</h3>
-                <p className="text-muted-foreground mb-4">{item.description}</p>
-                <p className="text-2xl font-bold text-secondary">{item.price}</p>
+                <h3 className="text-lg md:text-xl font-semibold mb-2 text-primary">{item.name}</h3>
+                <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4">{item.description}</p>
+                <p className="text-xl md:text-2xl font-bold text-secondary">{item.price}</p>
               </Card>
             ))}
           </div>
-          <div className="text-center mt-12">
+          <div className="text-center mt-8 md:mt-12">
             <Button variant="outline" size="lg" onClick={() => navigate("/menu")}>
               View Full Menu
             </Button>

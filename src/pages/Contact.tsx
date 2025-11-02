@@ -66,23 +66,23 @@ const Contact = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="hero-gradient py-20 px-4">
+      <section className="hero-gradient py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="text-5xl font-bold mb-6 animate-fade-in">Let's Talk Breakfast</h1>
-          <p className="text-xl text-muted-foreground animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 animate-fade-in">Let's Talk Breakfast</h1>
+          <p className="text-base md:text-xl text-muted-foreground animate-fade-in px-4">
             Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-4">
+      <section className="py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             {/* Contact Form */}
-            <Card className="p-8 card-shadow animate-fade-in">
-              <h2 className="text-2xl font-bold mb-6 text-primary">Send Us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <Card className="p-4 md:p-8 card-shadow animate-fade-in">
+              <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-primary">Send Us a Message</h2>
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
                     Your Name
@@ -135,19 +135,19 @@ const Contact = () => {
             </Card>
 
             {/* Contact Info */}
-            <div className="space-y-6 animate-fade-in">
-              <h2 className="text-2xl font-bold mb-8 text-primary">Get in Touch</h2>
-              <div className="space-y-4">
+            <div className="space-y-4 md:space-y-6 animate-fade-in">
+              <h2 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-primary">Get in Touch</h2>
+              <div className="space-y-3 md:space-y-4">
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
-                    <Card key={index} className="p-6 card-shadow hover:scale-105 transition-smooth">
-                      <div className="flex items-center space-x-4">
-                        <div className="bg-muted p-3 rounded-lg">
-                          <Icon className="text-secondary" size={24} />
+                    <Card key={index} className="p-4 md:p-6 card-shadow hover:scale-105 transition-smooth">
+                      <div className="flex items-center space-x-3 md:space-x-4">
+                        <div className="bg-muted p-2 md:p-3 rounded-lg flex-shrink-0">
+                          <Icon className="text-secondary" size={20} />
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-sm text-muted-foreground mb-1">
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-xs md:text-sm text-muted-foreground mb-1">
                             {info.title}
                           </h3>
                           {info.link ? (
@@ -155,12 +155,12 @@ const Contact = () => {
                               href={info.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-primary hover:text-secondary transition-smooth"
+                              className="text-sm md:text-base text-primary hover:text-secondary transition-smooth break-all"
                             >
                               {info.content}
                             </a>
                           ) : (
-                            <p className="text-primary">{info.content}</p>
+                            <p className="text-sm md:text-base text-primary">{info.content}</p>
                           )}
                         </div>
                       </div>
@@ -170,7 +170,7 @@ const Contact = () => {
               </div>
 
               {/* Additional Info */}
-              <Card className="p-6 bg-muted/50 border-secondary/20 card-shadow">
+              <Card className="p-4 md:p-6 bg-muted/50 border-secondary/20 card-shadow">
                 <h3 className="font-semibold mb-2 text-primary">Business Hours</h3>
                 <p className="text-sm text-muted-foreground mb-1">Monday - Friday: 6:00 AM - 11:00 AM</p>
                 <p className="text-sm text-muted-foreground mb-1">Saturday: 7:00 AM - 12:00 PM</p>

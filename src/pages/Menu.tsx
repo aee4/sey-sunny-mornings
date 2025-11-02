@@ -2,14 +2,147 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ChevronLeft, ChevronRight, ShoppingCart, Plus, Minus, X } from "lucide-react";
 import kokoImage from "@/assets/menu-koko.jpg";
 import smoothiesImage from "@/assets/menu-smoothies.jpg";
 import sandwichImage from "@/assets/menu-sandwich.jpg";
+import { toast } from "sonner";
+
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  priceDisplay: string;
+}
+
+interface CartItem extends MenuItem {
+  quantity: number;
+}
 
 const Menu = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
+  const [orderForm, setOrderForm] = useState({ phone: "", location: "" });
   const navigate = useNavigate();
+
+  // Extract all menu items
+  const allMenuItems: MenuItem[] = [
+    {
+      id: "1",
+      name: "Millet Delight (Koko)",
+      description: "Creamy millet porridge with a coconut milk twist",
+      price: 22,
+      priceDisplay: "GH₵22",
+    },
+    {
+      id: "2",
+      name: "Tombrown Classic",
+      description: "Smooth roasted corn porridge with a touch of milk and spice",
+      price: 18,
+      priceDisplay: "GH₵18",
+    },
+    {
+      id: "3",
+      name: "Morning Glow Smoothie",
+      description: "Banana, oats, and honey blend for natural energy",
+      price: 35,
+      priceDisplay: "GH₵35",
+    },
+    {
+      id: "4",
+      name: "Berry Burst Smoothie",
+      description: "Strawberries, yogurt, and a hint of vanilla",
+      price: 30,
+      priceDisplay: "GH₵30",
+    },
+    {
+      id: "5",
+      name: "Egg & Avocado Sandwich",
+      description: "Soft wheat bread with boiled egg and avocado",
+      price: 25,
+      priceDisplay: "GH₵25",
+    },
+    {
+      id: "6",
+      name: "Tropical Fruit Cup",
+      description: "Fresh mix of pineapple, watermelon, and banana",
+      price: 18,
+      priceDisplay: "GH₵18",
+    },
+  ];
+
+  const addToCart = (item: MenuItem) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      if (existingItem) {
+        return prevCart.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      }
+      return [...prevCart, { ...item, quantity: 1 }];
+    });
+    toast.success(`${item.name} added to cart`);
+  };
+
+  const removeFromCart = (itemId: string) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+  };
+
+  const updateQuantity = (itemId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(itemId);
+      return;
+    }
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === itemId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const getTotal = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const getItemById = (id: string) => {
+    return allMenuItems.find((item) => item.id === id);
+  };
+
+  const handleOrder = () => {
+    if (cart.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+    setIsOrderDialogOpen(true);
+  };
+
+  const handleSubmitOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!orderForm.phone || !orderForm.location) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    setIsOrderDialogOpen(false);
+    setCart([]);
+    setOrderForm({ phone: "", location: "" });
+    toast.success("Order placed! Your breakfast is on the way! 🍳", {
+      description: `We'll contact you at ${orderForm.phone} for delivery to ${orderForm.location}`,
+      duration: 5000,
+    });
+  };
 
   const menuPages = [
     {
@@ -41,35 +174,13 @@ const Menu = () => {
         ),
       },
       right: {
-        items: [
-          {
-            name: "Millet Delight (Koko)",
-            description: "Creamy millet porridge with a coconut milk twist",
-            price: "GH₵22",
-          },
-          {
-            name: "Tombrown Classic",
-            description: "Smooth roasted corn porridge with a touch of milk and spice",
-            price: "GH₵18",
-          },
-        ],
+        itemIds: ["1", "2"],
       },
     },
     {
       type: "spread",
       left: {
-        items: [
-          {
-            name: "Morning Glow Smoothie",
-            description: "Banana, oats, and honey blend for natural energy",
-            price: "GH₵35",
-          },
-          {
-            name: "Berry Burst Smoothie",
-            description: "Strawberries, yogurt, and a hint of vanilla",
-            price: "GH₵30",
-          },
-        ],
+        itemIds: ["3", "4"],
       },
       right: {
         image: true,
@@ -105,18 +216,7 @@ const Menu = () => {
         ),
       },
       right: {
-        items: [
-          {
-            name: "Egg & Avocado Sandwich",
-            description: "Soft wheat bread with boiled egg and avocado",
-            price: "GH₵25",
-          },
-          {
-            name: "Tropical Fruit Cup",
-            description: "Fresh mix of pineapple, watermelon, and banana",
-            price: "GH₵18",
-          },
-        ],
+        itemIds: ["5", "6"],
       },
     },
     {
@@ -130,8 +230,12 @@ const Menu = () => {
             Available for pickup or delivery in Accra
           </p>
           <div className="flex space-x-4">
-            <Button variant="cta" size="lg">Order Now</Button>
-            <Button variant="outline" size="lg" onClick={() => navigate("/contact")}>Contact Us</Button>
+            <Button variant="cta" size="lg" onClick={handleOrder}>
+              Order Now
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => navigate("/contact")}>
+              Contact Us
+            </Button>
           </div>
         </div>
       ),
@@ -150,6 +254,32 @@ const Menu = () => {
     }
   };
 
+  const renderMenuItem = (itemId: string) => {
+    const item = getItemById(itemId);
+    if (!item) return null;
+
+    return (
+      <div key={item.id} className="space-y-3">
+        <div className="space-y-2">
+          <h3 className="text-2xl font-bold text-primary">{item.name}</h3>
+          <p className="text-muted-foreground">{item.description}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-3xl font-bold text-secondary">{item.priceDisplay}</p>
+            <Button
+              variant="cta"
+              size="sm"
+              onClick={() => addToCart(item)}
+              className="gap-2"
+            >
+              <Plus size={16} />
+              Add to Cart
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderPage = (page: any) => {
     if (page.type === "intro" || page.type === "outro") {
       return (
@@ -166,14 +296,8 @@ const Menu = () => {
           {page.left.image ? (
             page.left.content
           ) : (
-            <div className="p-12 h-full flex flex-col justify-center space-y-8">
-              {page.left.items?.map((item: any, idx: number) => (
-                <div key={idx} className="space-y-2">
-                  <h3 className="text-2xl font-bold text-primary">{item.name}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                  <p className="text-3xl font-bold text-secondary">{item.price}</p>
-                </div>
-              ))}
+            <div className="p-12 h-full flex flex-col justify-center space-y-8 overflow-y-auto">
+              {page.left.itemIds?.map((itemId: string) => renderMenuItem(itemId))}
             </div>
           )}
         </Card>
@@ -183,14 +307,8 @@ const Menu = () => {
           {page.right.image ? (
             page.right.content
           ) : (
-            <div className="p-12 h-full flex flex-col justify-center space-y-8">
-              {page.right.items?.map((item: any, idx: number) => (
-                <div key={idx} className="space-y-2">
-                  <h3 className="text-2xl font-bold text-primary">{item.name}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                  <p className="text-3xl font-bold text-secondary">{item.price}</p>
-                </div>
-              ))}
+            <div className="p-12 h-full flex flex-col justify-center space-y-8 overflow-y-auto">
+              {page.right.itemIds?.map((itemId: string) => renderMenuItem(itemId))}
             </div>
           )}
         </Card>
@@ -198,9 +316,27 @@ const Menu = () => {
     );
   };
 
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="container mx-auto max-w-6xl">
+        {/* Cart Button - Fixed position */}
+        {cart.length > 0 && (
+          <div className="fixed bottom-6 right-6 z-50">
+            <Button
+              variant="cta"
+              size="lg"
+              onClick={handleOrder}
+              className="gap-2 shadow-lg"
+            >
+              <ShoppingCart size={20} />
+              <span>Cart ({cartItemCount})</span>
+              <span className="ml-2">• GH₵{getTotal()}</span>
+            </Button>
+          </div>
+        )}
+
         {/* Menu Booklet */}
         <div className="relative">
           {renderPage(menuPages[currentPage])}
@@ -246,6 +382,108 @@ const Menu = () => {
             ))}
           </div>
         </div>
+
+        {/* Order Dialog */}
+        <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Place Your Order</DialogTitle>
+              <DialogDescription>
+                Review your cart and provide your contact details for delivery.
+              </DialogDescription>
+            </DialogHeader>
+
+            {/* Cart Items */}
+            <div className="space-y-4 max-h-[300px] overflow-y-auto">
+              {cart.map((item) => (
+                <Card key={item.id} className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-primary">{item.name}</h4>
+                      <p className="text-sm text-muted-foreground">{item.priceDisplay} each</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        >
+                          <Minus size={14} />
+                        </Button>
+                        <span className="w-8 text-center font-semibold">{item.quantity}</span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <Plus size={14} />
+                        </Button>
+                      </div>
+                      <div className="text-right min-w-[80px]">
+                        <p className="font-bold">GH₵{item.price * item.quantity}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <X size={14} />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            {/* Total */}
+            <div className="flex justify-between items-center pt-4 border-t">
+              <span className="text-lg font-semibold">Total:</span>
+              <span className="text-2xl font-bold text-secondary">GH₵{getTotal()}</span>
+            </div>
+
+            {/* Order Form */}
+            <form onSubmit={handleSubmitOrder} className="space-y-4 pt-4">
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                  Phone Number
+                </label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+233 XX XXX XXXX"
+                  value={orderForm.phone}
+                  onChange={(e) => setOrderForm({ ...orderForm, phone: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="location" className="block text-sm font-medium mb-2">
+                  Delivery Location
+                </label>
+                <Input
+                  id="location"
+                  type="text"
+                  placeholder="Enter your location in Accra"
+                  value={orderForm.location}
+                  onChange={(e) => setOrderForm({ ...orderForm, location: e.target.value })}
+                  required
+                />
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setIsOrderDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="cta">
+                  Place Order
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

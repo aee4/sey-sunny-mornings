@@ -8,6 +8,7 @@ import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import kokoImage from "@/assets/menu-koko.jpg";
 import smoothiesImage from "@/assets/menu-smoothies.jpg";
 import sandwichImage from "@/assets/menu-sandwich.jpg";
+import ReadyEat from "@/assets/ready-eat.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -164,7 +165,7 @@ const Menu = () => {
             className={`group relative rounded-2xl overflow-hidden h-48 md:h-64 warm-shadow transition-transform duration-300 ${selectedCategory === "cooked" ? "ring-2 ring-secondary" : ""}`}
             aria-label="Cooked Meals"
           >
-            <img src={sandwichImage} alt="Cooked meals" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
+            <img src={ReadyEat} alt="Cooked meals" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center text-white drop-shadow">

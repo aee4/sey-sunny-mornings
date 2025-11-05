@@ -46,7 +46,6 @@ const Menu = () => {
       price: 30,
       priceDisplay: "GH₵30",
       image: kokoImage,
-      ingredients: ["Millet", "Coconut milk", "Water", "Spices", "Sugar (optional)"],
     },
     {
       id: "2",
@@ -55,7 +54,6 @@ const Menu = () => {
       price: 22,
       priceDisplay: "GH₵22",
       image: TombrownClassic,
-      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices"],
     },
     {
       id: "3",
@@ -64,7 +62,6 @@ const Menu = () => {
       price: 35,
       priceDisplay: "GH₵35",
       image: smoothiesImage,
-      ingredients: ["Banana", "Oats", "Honey", "Yogurt", "Ice"],
     },
     {
       id: "4",
@@ -73,7 +70,6 @@ const Menu = () => {
       price: 30,
       priceDisplay: "GH₵30",
       image: BBSmoothie,
-      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey"]
     },
     {
       id: "5",
@@ -82,7 +78,6 @@ const Menu = () => {
       price: 25,
       priceDisplay: "GH₵25",
       image: sandwichImage,
-      ingredients: ["Wheat bread", "Egg", "Avocado", "Salt", "Pepper"],
     },
     {
       id: "6",
@@ -91,7 +86,6 @@ const Menu = () => {
       price: 18,
       priceDisplay: "GH₵18",
       image: TropicalCup,
-      ingredients: ["Pineapple", "Watermelon", "Banana"],
     },
   ];
 

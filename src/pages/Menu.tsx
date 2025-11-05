@@ -9,6 +9,7 @@ import kokoImage from "@/assets/menu-koko.jpg";
 import smoothiesImage from "@/assets/menu-smoothies.jpg";
 import sandwichImage from "@/assets/menu-sandwich.jpg";
 import ReadyEat from "@/assets/ready-to-eat.jpg";
+import RawMaterials from "@/assets/raw-materials.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {

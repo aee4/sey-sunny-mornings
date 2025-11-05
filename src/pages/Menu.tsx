@@ -11,6 +11,7 @@ import sandwichImage from "@/assets/menu-sandwich.jpg";
 import ReadyEat from "@/assets/ready-to-eat.jpg";
 import RawMaterials from "@/assets/raw-materials.jpg";
 import TombrownClassic from "@/assets/tombrown.jpg";
+import BBSmoothie from "@/assets/bbsmoothie.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -70,7 +71,7 @@ const Menu = () => {
       description: "Strawberries, yogurt, and a hint of vanilla",
       price: 30,
       priceDisplay: "GH₵30",
-      image: smoothiesImage,
+      image: BBSmoothie,
       ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey"]
     },
     {

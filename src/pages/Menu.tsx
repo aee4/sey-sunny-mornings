@@ -46,6 +46,7 @@ const Menu = () => {
       price: 30,
       priceDisplay: "GH₵30",
       image: kokoImage,
+      ingredients: ["Millet", "Coconut milk", "Water", "Ginger", "Salt", "Sugar", "Cinnamon"],
     },
     {
       id: "2",
@@ -54,14 +55,16 @@ const Menu = () => {
       price: 22,
       priceDisplay: "GH₵22",
       image: TombrownClassic,
+      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices", "Sugar"],
     },
     {
       id: "3",
-      name: "Morning Glow Smoothie",
-      description: "Banana, oats, and honey blend for natural energy",
-      price: 35,
-      priceDisplay: "GH₵35",
+      name: "Banana Smoothie",
+      description: "Fresh banana blend with yogurt and honey",
+      price: 28,
+      priceDisplay: "GH₵28",
       image: smoothiesImage,
+      ingredients: ["Fresh bananas", "Yogurt", "Honey", "Ice", "Milk"],
     },
     {
       id: "4",
@@ -70,6 +73,7 @@ const Menu = () => {
       price: 30,
       priceDisplay: "GH₵30",
       image: BBSmoothie,
+      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey", "Ice"],
     },
     {
       id: "5",
@@ -78,6 +82,7 @@ const Menu = () => {
       price: 25,
       priceDisplay: "GH₵25",
       image: sandwichImage,
+      ingredients: ["Wheat bread", "Egg", "Avocado", "Salt", "Pepper"],
     },
     {
       id: "6",
@@ -86,6 +91,16 @@ const Menu = () => {
       price: 18,
       priceDisplay: "GH₵18",
       image: TropicalCup,
+      ingredients: ["Pineapple", "Watermelon", "Banana"],
+    },
+    {
+      id: "7",
+      name: "Oats Porridge",
+      description: "Creamy oats porridge with milk and honey",
+      price: 24,
+      priceDisplay: "GH₵24",
+      image: smoothiesImage,
+      ingredients: ["Oats", "Milk", "Water", "Honey", "Cinnamon", "Banana"],
     },
   ];
 
@@ -143,6 +158,15 @@ const Menu = () => {
       priceDisplay: "GH₵15",
       image: RawMaterials,
       ingredients: ["Pineapple", "Watermelon", "Banana"],
+    },
+    {
+      id: "raw-7",
+      name: "Oats",
+      description: "Premium rolled oats for porridge and smoothies",
+      price: 14,
+      priceDisplay: "GH₵14",
+      image: RawMaterials,
+      ingredients: ["Rolled oats"],
     },
   ];
 
@@ -261,7 +285,17 @@ const Menu = () => {
               </div>
               <div className="p-5">
                 <h3 className="text-lg md:text-xl font-semibold text-primary">{item.name}</h3>
-                <p className="text-sm text-muted-foreground mt-1 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity">{item.description}</p>
+                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
+                {item.ingredients && item.ingredients.length > 0 && (
+                  <ul className="text-sm text-muted-foreground mt-2 space-y-1">
+                    {item.ingredients.slice(0, 4).map((ing, idx) => (
+                      <li key={idx} className="list-disc list-inside">{ing}</li>
+                    ))}
+                    {item.ingredients.length > 4 && (
+                      <li className="text-xs text-muted-foreground/70">+{item.ingredients.length - 4} more</li>
+                    )}
+                  </ul>
+                )}
                 <div className="flex items-center justify-between mt-4">
                   <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
                   <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">

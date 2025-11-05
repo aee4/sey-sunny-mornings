@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import kokoImage from "@/assets/menu-koko.jpg";
 import smoothiesImage from "@/assets/menu-smoothies.jpg";
@@ -13,6 +14,7 @@ import RawMaterials from "@/assets/raw-materials.jpg";
 import TombrownClassic from "@/assets/tombrown.jpg";
 import BBSmoothie from "@/assets/bbsmoothie.jpg";
 import TropicalCup from "@/assets/tropical-cup.jpg";
+import Oats from "@/assets/oats.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -23,10 +25,12 @@ interface MenuItem {
   priceDisplay: string;
   image: string;
   ingredients?: string[];
+  needsSweetener?: boolean;
 }
 
 interface CartItem extends MenuItem {
   quantity: number;
+  sweetener?: "Sugar" | "Honey" | "None";
 }
 
 type Category = "cooked" | "raw";
@@ -36,6 +40,7 @@ const Menu = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
   const [orderForm, setOrderForm] = useState({ phone: "", location: "" });
+  const [sweetenerSelections, setSweetenerSelections] = useState<Record<string, "Sugar" | "Honey" | "None">>({});
   const navigate = useNavigate();
 
   const cookedMenuItems: MenuItem[] = [
@@ -43,28 +48,31 @@ const Menu = () => {
       id: "1",
       name: "Millet Delight (Koko)",
       description: "Creamy millet porridge with a coconut milk twist",
-      price: 30,
-      priceDisplay: "GH₵30",
+      price: 22,
+      priceDisplay: "GH₵22",
       image: kokoImage,
-      ingredients: ["Millet", "Coconut milk", "Water", "Ginger", "Salt", "Sugar", "Cinnamon"],
+      ingredients: ["Millet", "Coconut milk", "Water", "Spices", "Sugar (optional)"],
+      needsSweetener: true,
     },
     {
       id: "2",
       name: "Tombrown Classic",
       description: "Smooth roasted corn porridge with a touch of milk and spice",
-      price: 22,
-      priceDisplay: "GH₵22",
+      price: 18,
+      priceDisplay: "GH₵18",
       image: TombrownClassic,
-      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices", "Sugar"],
+      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices"],
+      needsSweetener: true,
     },
     {
       id: "3",
-      name: "Banana Smoothie",
-      description: "Fresh banana blend with yogurt and honey",
-      price: 28,
-      priceDisplay: "GH₵28",
+      name: "Morning Glow Smoothie",
+      description: "Banana, oats, and honey blend for natural energy",
+      price: 35,
+      priceDisplay: "GH₵35",
       image: smoothiesImage,
-      ingredients: ["Fresh bananas", "Yogurt", "Honey", "Ice", "Milk"],
+      ingredients: ["Banana", "Oats", "Honey", "Yogurt", "Ice"],
+      needsSweetener: true,
     },
     {
       id: "4",
@@ -73,7 +81,8 @@ const Menu = () => {
       price: 30,
       priceDisplay: "GH₵30",
       image: BBSmoothie,
-      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey", "Ice"],
+      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey"],
+      needsSweetener: true,
     },
     {
       id: "5",
@@ -83,6 +92,7 @@ const Menu = () => {
       priceDisplay: "GH₵25",
       image: sandwichImage,
       ingredients: ["Wheat bread", "Egg", "Avocado", "Salt", "Pepper"],
+      needsSweetener: false,
     },
     {
       id: "6",
@@ -92,6 +102,7 @@ const Menu = () => {
       priceDisplay: "GH₵18",
       image: TropicalCup,
       ingredients: ["Pineapple", "Watermelon", "Banana"],
+      needsSweetener: false,
     },
     {
       id: "7",
@@ -99,8 +110,9 @@ const Menu = () => {
       description: "Creamy oats porridge with milk and honey",
       price: 24,
       priceDisplay: "GH₵24",
-      image: smoothiesImage,
+      image: Oats,
       ingredients: ["Oats", "Milk", "Water", "Honey", "Cinnamon", "Banana"],
+      needsSweetener: true,
     },
   ];
 
@@ -125,8 +137,8 @@ const Menu = () => {
     },
     {
       id: "raw-3",
-      name: "Fresh Bananas",
-      description: "Ripe bananas for smoothies and breakfast",
+      name: "Banana",
+      description: "Fresh ripe bananas for smoothies and breakfast",
       price: 8,
       priceDisplay: "GH₵8",
       image: RawMaterials,
@@ -134,6 +146,33 @@ const Menu = () => {
     },
     {
       id: "raw-4",
+      name: "Oats",
+      description: "Premium rolled oats for porridge and smoothies",
+      price: 14,
+      priceDisplay: "GH₵14",
+      image: RawMaterials,
+      ingredients: ["Rolled oats"],
+    },
+    {
+      id: "raw-5",
+      name: "Honey",
+      description: "Pure natural honey for sweetening",
+      price: 18,
+      priceDisplay: "GH₵18",
+      image: RawMaterials,
+      ingredients: ["Pure honey"],
+    },
+    {
+      id: "raw-6",
+      name: "Yogurt",
+      description: "Fresh creamy yogurt for smoothies",
+      price: 16,
+      priceDisplay: "GH₵16",
+      image: RawMaterials,
+      ingredients: ["Fresh yogurt"],
+    },
+    {
+      id: "raw-7",
       name: "Strawberries",
       description: "Fresh strawberries for smoothies",
       price: 20,
@@ -142,7 +181,16 @@ const Menu = () => {
       ingredients: ["Fresh strawberries"],
     },
     {
-      id: "raw-5",
+      id: "raw-8",
+      name: "Vanilla Extract",
+      description: "Pure vanilla extract for flavoring",
+      price: 22,
+      priceDisplay: "GH₵22",
+      image: RawMaterials,
+      ingredients: ["Vanilla extract"],
+    },
+    {
+      id: "raw-9",
       name: "Wheat Bread",
       description: "Fresh baked wheat bread",
       price: 10,
@@ -151,53 +199,126 @@ const Menu = () => {
       ingredients: ["Wheat flour", "Yeast", "Water"],
     },
     {
-      id: "raw-6",
-      name: "Mixed Fruits",
-      description: "Fresh pineapple, watermelon, and banana mix",
+      id: "raw-10",
+      name: "Eggs",
+      description: "Fresh farm eggs",
+      price: 12,
+      priceDisplay: "GH₵12",
+      image: RawMaterials,
+      ingredients: ["Fresh eggs"],
+    },
+    {
+      id: "raw-11",
+      name: "Avocado",
+      description: "Ripe creamy avocados",
       price: 15,
       priceDisplay: "GH₵15",
       image: RawMaterials,
-      ingredients: ["Pineapple", "Watermelon", "Banana"],
+      ingredients: ["Fresh avocados"],
     },
     {
-      id: "raw-7",
-      name: "Oats",
-      description: "Premium rolled oats for porridge and smoothies",
-      price: 14,
-      priceDisplay: "GH₵14",
+      id: "raw-12",
+      name: "Salt & Pepper",
+      description: "Fine sea salt and black pepper",
+      price: 5,
+      priceDisplay: "GH₵5",
       image: RawMaterials,
-      ingredients: ["Rolled oats"],
+      ingredients: ["Sea salt", "Black pepper"],
+    },
+    {
+      id: "raw-13",
+      name: "Pineapple",
+      description: "Fresh sweet pineapple",
+      price: 12,
+      priceDisplay: "GH₵12",
+      image: RawMaterials,
+      ingredients: ["Fresh pineapple"],
+    },
+    {
+      id: "raw-14",
+      name: "Watermelon",
+      description: "Fresh juicy watermelon",
+      price: 10,
+      priceDisplay: "GH₵10",
+      image: RawMaterials,
+      ingredients: ["Fresh watermelon"],
+    },
+    {
+      id: "raw-15",
+      name: "Coconut Milk",
+      description: "Creamy coconut milk for cooking",
+      price: 16,
+      priceDisplay: "GH₵16",
+      image: RawMaterials,
+      ingredients: ["Coconut milk"],
+    },
+    {
+      id: "raw-16",
+      name: "Milk",
+      description: "Fresh whole milk",
+      price: 8,
+      priceDisplay: "GH₵8",
+      image: RawMaterials,
+      ingredients: ["Fresh milk"],
+    },
+    {
+      id: "raw-17",
+      name: "Spices",
+      description: "Assorted spices for flavoring",
+      price: 10,
+      priceDisplay: "GH₵10",
+      image: RawMaterials,
+      ingredients: ["Ginger", "Cinnamon", "Nutmeg"],
+    },
+    {
+      id: "raw-18",
+      name: "Sugar",
+      description: "Granulated sugar for sweetening",
+      price: 6,
+      priceDisplay: "GH₵6",
+      image: RawMaterials,
+      ingredients: ["Granulated sugar"],
     },
   ];
 
   const addToCart = (item: MenuItem) => {
+    const sweetener = item.needsSweetener ? (sweetenerSelections[item.id] || "None") : undefined;
+    
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem.id === item.id && cartItem.sweetener === sweetener
+      );
       if (existingItem) {
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem.id === item.id && cartItem.sweetener === sweetener
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       }
-      return [...prevCart, { ...item, quantity: 1 }];
+      return [...prevCart, { ...item, quantity: 1, sweetener }];
     });
-    toast.success(`${item.name} added to cart`);
+    
+    const sweetenerText = sweetener && sweetener !== "None" ? ` (${sweetener})` : "";
+    toast.success(`${item.name}${sweetenerText} added to cart`);
   };
 
-  const removeFromCart = (itemId: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+  const removeFromCart = (itemKey: string) => {
+    setCart((prevCart) => prevCart.filter((item) => {
+      const itemKeyCurrent = `${item.id}-${item.sweetener || 'none'}`;
+      return itemKeyCurrent !== itemKey;
+    }));
   };
 
-  const updateQuantity = (itemId: string, quantity: number) => {
+  const updateQuantity = (itemKey: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(itemId);
+      removeFromCart(itemKey);
       return;
     }
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === itemId ? { ...item, quantity } : item
-      )
+      prevCart.map((item) => {
+        const itemKeyCurrent = `${item.id}-${item.sweetener || 'none'}`;
+        return itemKeyCurrent === itemKey ? { ...item, quantity } : item;
+      })
     );
   };
 
@@ -234,36 +355,43 @@ const Menu = () => {
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const renderHero = () => (
-    <section className="py-12 md:py-16 px-4 bg-white">
+    <section className="py-16 md:py-20 px-4 hero-gradient">
       <div className="container mx-auto max-w-6xl">
-        <p className="text-center text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Choose your craving — Ready-to-eat or ready-to-cook.</p>
-        <div className="grid sm:grid-cols-2 gap-4 md:gap-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 md:mb-6 text-primary">
+          Our Menu
+        </h1>
+        <p className="text-center text-base md:text-lg text-muted-foreground mb-8 md:mb-12">
+          Choose your craving — Ready-to-eat or ready-to-cook.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
           <button
             onClick={() => setSelectedCategory("cooked")}
-            className={`group relative rounded-2xl overflow-hidden h-48 md:h-64 warm-shadow transition-transform duration-300 ${selectedCategory === "cooked" ? "ring-2 ring-secondary" : ""}`}
+            className={`group relative rounded-2xl overflow-hidden h-56 md:h-72 warm-shadow transition-all duration-300 hover:scale-105 ${selectedCategory === "cooked" ? "ring-4 ring-secondary scale-105" : ""}`}
             aria-label="Cooked Meals"
           >
             <img src={ReadyEat} alt="Cooked meals" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-white drop-shadow">
-                <div className="text-2xl md:text-3xl font-bold">Cooked Meals 🍽️</div>
-                <div className="mt-1 text-sm opacity-90">Warm plates, ready to enjoy</div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
+              <div className="text-center text-white drop-shadow-lg">
+                <div className="text-3xl md:text-4xl font-bold mb-2">Cooked Meals</div>
+                <div className="text-4xl md:text-5xl mb-3">🍽️</div>
+                <div className="text-base md:text-lg opacity-90">Warm plates, ready to enjoy</div>
               </div>
             </div>
           </button>
 
           <button
             onClick={() => setSelectedCategory("raw")}
-            className={`group relative rounded-2xl overflow-hidden h-48 md:h-64 warm-shadow transition-transform duration-300 ${selectedCategory === "raw" ? "ring-2 ring-secondary" : ""}`}
+            className={`group relative rounded-2xl overflow-hidden h-56 md:h-72 warm-shadow transition-all duration-300 hover:scale-105 ${selectedCategory === "raw" ? "ring-4 ring-secondary scale-105" : ""}`}
             aria-label="Raw Materials"
           >
             <img src={RawMaterials} alt="Raw materials" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-white drop-shadow">
-                <div className="text-2xl md:text-3xl font-bold">Raw Materials 🥬</div>
-                <div className="mt-1 text-sm opacity-90">Fresh ingredients to cook</div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
+              <div className="text-center text-white drop-shadow-lg">
+                <div className="text-3xl md:text-4xl font-bold mb-2">Raw Materials</div>
+                <div className="text-4xl md:text-5xl mb-3">🥬</div>
+                <div className="text-base md:text-lg opacity-90">Fresh ingredients to cook</div>
               </div>
             </div>
           </button>
@@ -285,17 +413,34 @@ const Menu = () => {
               </div>
               <div className="p-5">
                 <h3 className="text-lg md:text-xl font-semibold text-primary">{item.name}</h3>
-                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
-                {item.ingredients && item.ingredients.length > 0 && (
-                  <ul className="text-sm text-muted-foreground mt-2 space-y-1">
-                    {item.ingredients.slice(0, 4).map((ing, idx) => (
-                      <li key={idx} className="list-disc list-inside">{ing}</li>
-                    ))}
-                    {item.ingredients.length > 4 && (
-                      <li className="text-xs text-muted-foreground/70">+{item.ingredients.length - 4} more</li>
-                    )}
-                  </ul>
+                <p className="text-sm text-muted-foreground mt-1 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity">{item.description}</p>
+                
+                {item.needsSweetener && (
+                  <div className="mt-3 mb-3">
+                    <label className="text-xs text-muted-foreground font-medium mb-1.5 block">
+                      Choice of Sweetener
+                    </label>
+                    <Select
+                      value={sweetenerSelections[item.id] || "None"}
+                      onValueChange={(value: "Sugar" | "Honey" | "None") => {
+                        setSweetenerSelections({
+                          ...sweetenerSelections,
+                          [item.id]: value,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Sugar">Sugar</SelectItem>
+                        <SelectItem value="Honey">Honey</SelectItem>
+                        <SelectItem value="None">None</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 )}
+                
                 <div className="flex items-center justify-between mt-4">
                   <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
                   <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">
@@ -313,29 +458,37 @@ const Menu = () => {
   const renderRawGrid = () => (
     <section className="py-12 md:py-16 px-4 bg-yellow-50">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Raw Materials / Ingredients</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Raw Materials</h2>
+        <p className="text-center text-muted-foreground mb-8 md:mb-12">
+          Same delicious meals, showing ingredients for cooking at home
+        </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {rawMenuItems.map((item) => (
+          {cookedMenuItems.map((item) => (
             <Card key={item.id} className="group overflow-hidden rounded-2xl warm-shadow hover:shadow-xl transition-smooth">
               <div className="relative">
                 <img src={item.image} alt={item.name} className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="p-5">
-                <h3 className="text-lg md:text-xl font-semibold text-primary">{item.name}</h3>
-                <ul className="text-sm text-muted-foreground mt-2 space-y-1">
-                  {item.ingredients?.slice(0, 5).map((ing, idx) => (
-                    <li key={idx} className="list-disc list-inside">{ing}</li>
-                  ))}
-                </ul>
-                <div className="flex items-center justify-between mt-4">
-                  <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">View Details</Button>
-                    <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">
-                      <Plus size={16} /> Add
-                    </Button>
+                <h3 className="text-lg md:text-xl font-semibold text-primary mb-3">{item.name}</h3>
+                {item.ingredients && item.ingredients.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Ingredients:</p>
+                    <ul className="text-sm text-muted-foreground space-y-1.5">
+                      {item.ingredients.map((ing, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-secondary mt-1">•</span>
+                          <span>{ing}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+                )}
+                <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                  <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
+                  <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">
+                    <Plus size={16} /> Add
+                  </Button>
                 </div>
               </div>
             </Card>
@@ -390,27 +543,32 @@ const Menu = () => {
 
           {/* Cart Items */}
           <div className="space-y-3 md:space-y-4 max-h-[250px] md:max-h-[300px] overflow-y-auto">
-            {cart.map((item) => (
-              <Card key={item.id} className="p-3 md:p-4">
+            {cart.map((item, index) => (
+              <Card key={`${item.id}-${item.sweetener || 'none'}-${index}`} className="p-3 md:p-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-sm md:text-base text-primary">{item.name}</h4>
-                    <p className="text-xs md:text-sm text-muted-foreground">{item.priceDisplay} each</p>
+                    <p className="text-xs md:text-sm text-muted-foreground">
+                      {item.priceDisplay} each
+                      {item.sweetener && item.sweetener !== "None" && (
+                        <span className="ml-2 text-xs">• {item.sweetener}</span>
+                      )}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                     <div className="flex items-center gap-1 md:gap-2">
-                      <Button variant="outline" size="icon" className="h-7 w-7 md:h-8 md:w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                      <Button variant="outline" size="icon" className="h-7 w-7 md:h-8 md:w-8" onClick={() => updateQuantity(`${item.id}-${item.sweetener || 'none'}`, item.quantity - 1)}>
                         <Minus size={12} className="md:w-3.5 md:h-3.5" />
                       </Button>
                       <span className="w-6 md:w-8 text-center font-semibold text-sm md:text-base">{item.quantity}</span>
-                      <Button variant="outline" size="icon" className="h-7 w-7 md:h-8 md:w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                      <Button variant="outline" size="icon" className="h-7 w-7 md:h-8 md:w-8" onClick={() => updateQuantity(`${item.id}-${item.sweetener || 'none'}`, item.quantity + 1)}>
                         <Plus size={12} className="md:w-3.5 md:h-3.5" />
                       </Button>
                     </div>
                     <div className="text-right min-w-[60px] md:min-w-[80px]">
                       <p className="font-bold text-sm md:text-base">GH₵{item.price * item.quantity}</p>
                     </div>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 md:h-8 md:w-8 text-destructive" onClick={() => removeFromCart(item.id)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7 md:h-8 md:w-8 text-destructive" onClick={() => removeFromCart(`${item.id}-${item.sweetener || 'none'}`)}>
                       <X size={12} className="md:w-3.5 md:h-3.5" />
                     </Button>
                   </div>

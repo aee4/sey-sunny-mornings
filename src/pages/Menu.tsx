@@ -38,7 +38,7 @@ const Menu = () => {
   const [orderForm, setOrderForm] = useState({ phone: "", location: "" });
   const navigate = useNavigate();
 
-  const allMenuItems: MenuItem[] = [
+  const cookedMenuItems: MenuItem[] = [
     {
       id: "1",
       name: "Millet Delight (Koko)",
@@ -95,6 +95,63 @@ const Menu = () => {
     },
   ];
 
+  const rawMenuItems: MenuItem[] = [
+    {
+      id: "raw-1",
+      name: "Millet",
+      description: "Premium quality millet grains for porridge",
+      price: 15,
+      priceDisplay: "GH₵15",
+      image: RawMaterials,
+      ingredients: ["Millet grains"],
+    },
+    {
+      id: "raw-2",
+      name: "Roasted Corn Powder",
+      description: "Finely ground roasted corn for tombrown",
+      price: 12,
+      priceDisplay: "GH₵12",
+      image: RawMaterials,
+      ingredients: ["Roasted corn powder"],
+    },
+    {
+      id: "raw-3",
+      name: "Fresh Bananas",
+      description: "Ripe bananas for smoothies and breakfast",
+      price: 8,
+      priceDisplay: "GH₵8",
+      image: RawMaterials,
+      ingredients: ["Fresh bananas"],
+    },
+    {
+      id: "raw-4",
+      name: "Strawberries",
+      description: "Fresh strawberries for smoothies",
+      price: 20,
+      priceDisplay: "GH₵20",
+      image: RawMaterials,
+      ingredients: ["Fresh strawberries"],
+    },
+    {
+      id: "raw-5",
+      name: "Wheat Bread",
+      description: "Fresh baked wheat bread",
+      price: 10,
+      priceDisplay: "GH₵10",
+      image: RawMaterials,
+      ingredients: ["Wheat flour", "Yeast", "Water"],
+    },
+    {
+      id: "raw-6",
+      name: "Mixed Fruits",
+      description: "Fresh pineapple, watermelon, and banana mix",
+      price: 15,
+      priceDisplay: "GH₵15",
+      image: RawMaterials,
+      ingredients: ["Pineapple", "Watermelon", "Banana"],
+    },
+  ];
+
   const addToCart = (item: MenuItem) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
@@ -129,8 +186,8 @@ const Menu = () => {
   const getTotal = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const getFilteredItems = () => {
-    if (selectedCategory === "cooked") return allMenuItems;
-    return allMenuItems;
+    if (selectedCategory === "cooked") return cookedMenuItems;
+    return rawMenuItems;
   };
 
   const handleOrder = () => {
@@ -202,7 +259,7 @@ const Menu = () => {
       <div className="container mx-auto max-w-6xl">
         <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Cooked Meals</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {getFilteredItems().map((item) => (
+          {cookedMenuItems.map((item) => (
             <Card key={item.id} className="group overflow-hidden rounded-2xl warm-shadow hover:shadow-xl transition-smooth">
               <div className="relative">
                 <img src={item.image} alt={item.name} className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -230,7 +287,7 @@ const Menu = () => {
       <div className="container mx-auto max-w-6xl">
         <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Raw Materials / Ingredients</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {getFilteredItems().map((item) => (
+          {rawMenuItems.map((item) => (
             <Card key={item.id} className="group overflow-hidden rounded-2xl warm-shadow hover:shadow-xl transition-smooth">
               <div className="relative">
                 <img src={item.image} alt={item.name} className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-105" />

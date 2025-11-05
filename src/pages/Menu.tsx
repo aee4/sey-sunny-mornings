@@ -10,6 +10,7 @@ import smoothiesImage from "@/assets/menu-smoothies.jpg";
 import sandwichImage from "@/assets/menu-sandwich.jpg";
 import ReadyEat from "@/assets/ready-to-eat.jpg";
 import RawMaterials from "@/assets/raw-materials.jpg";
+import TombrownClassic from "@/assets/tombrown.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -51,7 +52,7 @@ const Menu = () => {
       description: "Smooth roasted corn porridge with a touch of milk and spice",
       price: 18,
       priceDisplay: "GH₵18",
-      image: kokoImage,
+      image: TombrownClassic,
       ingredients: ["Roasted corn powder", "Milk", "Water", "Spices"],
     },
     {

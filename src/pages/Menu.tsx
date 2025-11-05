@@ -3,15 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, ShoppingCart, Plus, Minus, X } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import kokoImage from "@/assets/menu-koko.jpg";
 import smoothiesImage from "@/assets/menu-smoothies.jpg";
 import sandwichImage from "@/assets/menu-sandwich.jpg";
@@ -23,20 +16,23 @@ interface MenuItem {
   description: string;
   price: number;
   priceDisplay: string;
+  image: string;
+  ingredients?: string[];
 }
 
 interface CartItem extends MenuItem {
   quantity: number;
 }
 
+type Category = "cooked" | "raw";
+
 const Menu = () => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<Category>("cooked");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
   const [orderForm, setOrderForm] = useState({ phone: "", location: "" });
   const navigate = useNavigate();
 
-  // Extract all menu items
   const allMenuItems: MenuItem[] = [
     {
       id: "1",
@@ -44,6 +40,8 @@ const Menu = () => {
       description: "Creamy millet porridge with a coconut milk twist",
       price: 22,
       priceDisplay: "GH₵22",
+      image: kokoImage,
+      ingredients: ["Millet", "Coconut milk", "Water", "Spices", "Sugar (optional)"],
     },
     {
       id: "2",
@@ -51,6 +49,8 @@ const Menu = () => {
       description: "Smooth roasted corn porridge with a touch of milk and spice",
       price: 18,
       priceDisplay: "GH₵18",
+      image: kokoImage,
+      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices"],
     },
     {
       id: "3",
@@ -58,6 +58,8 @@ const Menu = () => {
       description: "Banana, oats, and honey blend for natural energy",
       price: 35,
       priceDisplay: "GH₵35",
+      image: smoothiesImage,
+      ingredients: ["Banana", "Oats", "Honey", "Yogurt", "Ice"],
     },
     {
       id: "4",
@@ -65,6 +67,8 @@ const Menu = () => {
       description: "Strawberries, yogurt, and a hint of vanilla",
       price: 30,
       priceDisplay: "GH₵30",
+      image: smoothiesImage,
+      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey"]
     },
     {
       id: "5",
@@ -72,6 +76,8 @@ const Menu = () => {
       description: "Soft wheat bread with boiled egg and avocado",
       price: 25,
       priceDisplay: "GH₵25",
+      image: sandwichImage,
+      ingredients: ["Wheat bread", "Egg", "Avocado", "Salt", "Pepper"],
     },
     {
       id: "6",
@@ -79,6 +85,8 @@ const Menu = () => {
       description: "Fresh mix of pineapple, watermelon, and banana",
       price: 18,
       priceDisplay: "GH₵18",
+      image: sandwichImage,
+      ingredients: ["Pineapple", "Watermelon", "Banana"],
     },
   ];
 
@@ -113,12 +121,12 @@ const Menu = () => {
     );
   };
 
-  const getTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
+  const getTotal = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
-  const getItemById = (id: string) => {
-    return allMenuItems.find((item) => item.id === id);
+  const getFilteredItems = () => {
+    if (selectedCategory === "cooked") return allMenuItems;
+    // For raw view, same items but emphasize ingredients
+    return allMenuItems;
   };
 
   const handleOrder = () => {
@@ -144,348 +152,207 @@ const Menu = () => {
     });
   };
 
-  const menuPages = [
-    {
-      type: "intro",
-      content: (
-        <div className="h-full flex flex-col items-center justify-center text-center p-6 md:p-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 text-primary">Our Breakfast Menu</h1>
-          <p className="text-base md:text-xl text-muted-foreground max-w-md px-4">
-            Discover our selection of fresh, locally-sourced breakfast items made with love every morning.
-          </p>
-        </div>
-      ),
-    },
-    {
-      type: "spread",
-      left: {
-        image: true,
-        content: (
-          <div className="h-full relative overflow-hidden">
-            <img 
-              src={kokoImage} 
-              alt="Millet porridge and Tombrown" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-              <p className="text-lg text-white font-medium">Locally sourced ingredients</p>
-            </div>
-          </div>
-        ),
-      },
-      right: {
-        itemIds: ["1", "2"],
-      },
-    },
-    {
-      type: "spread",
-      left: {
-        itemIds: ["3", "4"],
-      },
-      right: {
-        image: true,
-        content: (
-          <div className="h-full relative overflow-hidden">
-            <img 
-              src={smoothiesImage} 
-              alt="Fresh smoothies" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-              <p className="text-lg text-white font-medium">Fresh smoothies daily</p>
-            </div>
-          </div>
-        ),
-      },
-    },
-    {
-      type: "spread",
-      left: {
-        image: true,
-        content: (
-          <div className="h-full relative overflow-hidden">
-            <img 
-              src={sandwichImage} 
-              alt="Egg and avocado sandwich" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-              <p className="text-lg text-white font-medium">Filling sandwiches</p>
-            </div>
-          </div>
-        ),
-      },
-      right: {
-        itemIds: ["5", "6"],
-      },
-    },
-    {
-      type: "outro",
-      content: (
-        <div className="h-full flex flex-col items-center justify-center text-center p-6 md:p-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 md:mb-4 text-primary px-4">
-            All meals are freshly made every morning
-          </h2>
-          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 px-4">
-            Available for pickup or delivery in Accra
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto px-4">
-            <Button variant="cta" size="lg" onClick={handleOrder} className="w-full sm:w-auto">
-              Order Now
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => navigate("/contact")} className="w-full sm:w-auto">
-              Contact Us
-            </Button>
-          </div>
-        </div>
-      ),
-    },
-  ];
-
-  const nextPage = () => {
-    if (currentPage < menuPages.length - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const renderMenuItem = (itemId: string) => {
-    const item = getItemById(itemId);
-    if (!item) return null;
-
-    return (
-      <div key={item.id} className="space-y-2 md:space-y-3">
-        <div className="space-y-2">
-          <h3 className="text-xl md:text-2xl font-bold text-primary">{item.name}</h3>
-          <p className="text-sm md:text-base text-muted-foreground">{item.description}</p>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-2">
-            <p className="text-2xl md:text-3xl font-bold text-secondary">{item.priceDisplay}</p>
-            <Button
-              variant="cta"
-              size="sm"
-              onClick={() => addToCart(item)}
-              className="gap-2 w-full sm:w-auto"
-            >
-              <Plus size={14} className="md:w-4 md:h-4" />
-              <span className="text-xs md:text-sm">Add to Cart</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderPage = (page: any) => {
-    if (page.type === "intro" || page.type === "outro") {
-      return (
-        <div className="w-full h-[400px] md:h-[500px] lg:h-[600px] bg-background rounded-2xl warm-shadow">
-          {page.content}
-        </div>
-      );
-    }
-
-    return (
-      <div className="grid md:grid-cols-2 gap-4 md:gap-8 w-full">
-        {/* Left Page */}
-        <Card className="h-[500px] md:h-[600px] rounded-2xl warm-shadow overflow-hidden animate-slide-in-left">
-          {page.left.image ? (
-            page.left.content
-          ) : (
-            <div className="p-6 md:p-12 h-full flex flex-col justify-center space-y-6 md:space-y-8 overflow-y-auto">
-              {page.left.itemIds?.map((itemId: string) => renderMenuItem(itemId))}
-            </div>
-          )}
-        </Card>
-
-        {/* Right Page */}
-        <Card className="h-[500px] md:h-[600px] rounded-2xl warm-shadow overflow-hidden animate-slide-in-right">
-          {page.right.image ? (
-            page.right.content
-          ) : (
-            <div className="p-6 md:p-12 h-full flex flex-col justify-center space-y-6 md:space-y-8 overflow-y-auto">
-              {page.right.itemIds?.map((itemId: string) => renderMenuItem(itemId))}
-            </div>
-          )}
-        </Card>
-      </div>
-    );
-  };
-
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  return (
-    <div className="min-h-screen py-8 md:py-12 px-4">
+  const renderHero = () => (
+    <section className="py-12 md:py-16 px-4 bg-white">
       <div className="container mx-auto max-w-6xl">
-        {/* Cart Button - Fixed position */}
-        {cart.length > 0 && (
-          <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50">
-            <Button
-              variant="cta"
-              size="lg"
-              onClick={handleOrder}
-              className="gap-2 shadow-lg text-sm md:text-base"
-            >
-              <ShoppingCart size={18} className="md:w-5 md:h-5" />
-              <span className="hidden sm:inline">Cart ({cartItemCount})</span>
-              <span className="sm:hidden">({cartItemCount})</span>
-              <span className="ml-1 md:ml-2">• GH₵{getTotal()}</span>
-            </Button>
-          </div>
-        )}
-
-        {/* Menu Booklet */}
-        <div className="relative">
-          {renderPage(menuPages[currentPage])}
-
-          {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-6 md:mt-8 gap-2">
-            <Button
-              variant="outline"
-              onClick={prevPage}
-              disabled={currentPage === 0}
-              className="gap-1 md:gap-2 text-xs md:text-sm"
-            >
-              <ChevronLeft size={16} className="md:w-5 md:h-5" />
-              <span className="hidden sm:inline">Previous</span>
-            </Button>
-
-            <div className="text-xs md:text-sm text-muted-foreground">
-              Page {currentPage + 1} of {menuPages.length}
+        <p className="text-center text-sm md:text-base text-muted-foreground mb-6 md:mb-8">Choose your craving — Ready-to-eat or ready-to-cook.</p>
+        <div className="grid sm:grid-cols-2 gap-4 md:gap-8">
+          <button
+            onClick={() => setSelectedCategory("cooked")}
+            className={`group relative rounded-2xl overflow-hidden h-48 md:h-64 warm-shadow transition-transform duration-300 ${selectedCategory === "cooked" ? "ring-2 ring-secondary" : ""}`}
+            aria-label="Cooked Meals"
+          >
+            <img src={sandwichImage} alt="Cooked meals" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center text-white drop-shadow">
+                <div className="text-2xl md:text-3xl font-bold">Cooked Meals 🍽️</div>
+                <div className="mt-1 text-sm opacity-90">Warm plates, ready to enjoy</div>
+              </div>
             </div>
+          </button>
 
-            <Button
-              variant="outline"
-              onClick={nextPage}
-              disabled={currentPage === menuPages.length - 1}
-              className="gap-1 md:gap-2 text-xs md:text-sm"
-            >
-              <span className="hidden sm:inline">Next</span>
-              <ChevronRight size={16} className="md:w-5 md:h-5" />
+          <button
+            onClick={() => setSelectedCategory("raw")}
+            className={`group relative rounded-2xl overflow-hidden h-48 md:h-64 warm-shadow transition-transform duration-300 ${selectedCategory === "raw" ? "ring-2 ring-secondary" : ""}`}
+            aria-label="Raw Materials"
+          >
+            <img src={smoothiesImage} alt="Raw materials" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center text-white drop-shadow">
+                <div className="text-2xl md:text-3xl font-bold">Raw Materials 🥬</div>
+                <div className="mt-1 text-sm opacity-90">Fresh ingredients to cook</div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+
+  const renderCookedGrid = () => (
+    <section className="py-12 md:py-16 px-4 bg-amber-50">
+      <div className="container mx-auto max-w-6xl">
+        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Cooked Meals</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {getFilteredItems().map((item) => (
+            <Card key={item.id} className="group overflow-hidden rounded-2xl warm-shadow hover:shadow-xl transition-smooth">
+              <div className="relative">
+                <img src={item.image} alt={item.name} className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg md:text-xl font-semibold text-primary">{item.name}</h3>
+                <p className="text-sm text-muted-foreground mt-1 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity">{item.description}</p>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
+                  <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">
+                    <Plus size={16} /> Add
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  const renderRawGrid = () => (
+    <section className="py-12 md:py-16 px-4 bg-yellow-50">
+      <div className="container mx-auto max-w-6xl">
+        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Raw Materials / Ingredients</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {getFilteredItems().map((item) => (
+            <Card key={item.id} className="group overflow-hidden rounded-2xl warm-shadow hover:shadow-xl transition-smooth">
+              <div className="relative">
+                <img src={item.image} alt={item.name} className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg md:text-xl font-semibold text-primary">{item.name}</h3>
+                <ul className="text-sm text-muted-foreground mt-2 space-y-1">
+                  {item.ingredients?.slice(0, 5).map((ing, idx) => (
+                    <li key={idx} className="list-disc list-inside">{ing}</li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">View Details</Button>
+                    <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">
+                      <Plus size={16} /> Add
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
+  return (
+    <div className="min-h-screen">
+      {renderHero()}
+
+      {/* Smooth transition between sections by keying category */}
+      <div key={selectedCategory} className="animate-fade-in">
+        {selectedCategory === "cooked" ? renderCookedGrid() : renderRawGrid()}
+      </div>
+
+      {/* CTA strip */}
+      <section className="py-12 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl text-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button variant="cta" size="lg" onClick={handleOrder}>
+              Proceed to Order
             </Button>
-          </div>
-
-          {/* Page Indicators */}
-          <div className="flex justify-center space-x-2 mt-4 md:mt-6">
-            {menuPages.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentPage(idx)}
-                className={`w-2 h-2 rounded-full transition-smooth ${
-                  currentPage === idx ? "bg-primary w-8" : "bg-border"
-                }`}
-                aria-label={`Go to page ${idx + 1}`}
-              />
-            ))}
+            <Button variant="outline" size="lg" onClick={() => navigate("/contact")}>Contact Us</Button>
           </div>
         </div>
+      </section>
 
-        {/* Order Dialog */}
-        <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
-          <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Place Your Order</DialogTitle>
-              <DialogDescription>
-                Review your cart and provide your contact details for delivery.
-              </DialogDescription>
-            </DialogHeader>
+      {/* Floating Cart Button */}
+      {cart.length > 0 && (
+        <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50">
+          <Button variant="cta" size="lg" onClick={handleOrder} className="gap-2 shadow-lg text-sm md:text-base">
+            <ShoppingCart size={18} className="md:w-5 md:h-5" />
+            <span className="hidden sm:inline">Cart ({cartItemCount})</span>
+            <span className="sm:hidden">({cartItemCount})</span>
+            <span className="ml-1 md:ml-2">• GH₵{getTotal()}</span>
+          </Button>
+        </div>
+      )}
 
-            {/* Cart Items */}
-            <div className="space-y-3 md:space-y-4 max-h-[250px] md:max-h-[300px] overflow-y-auto">
-              {cart.map((item) => (
-                <Card key={item.id} className="p-3 md:p-4">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-sm md:text-base text-primary">{item.name}</h4>
-                      <p className="text-xs md:text-sm text-muted-foreground">{item.priceDisplay} each</p>
-                    </div>
-                    <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                      <div className="flex items-center gap-1 md:gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-7 w-7 md:h-8 md:w-8"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        >
-                          <Minus size={12} className="md:w-3.5 md:h-3.5" />
-                        </Button>
-                        <span className="w-6 md:w-8 text-center font-semibold text-sm md:text-base">{item.quantity}</span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-7 w-7 md:h-8 md:w-8"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        >
-                          <Plus size={12} className="md:w-3.5 md:h-3.5" />
-                        </Button>
-                      </div>
-                      <div className="text-right min-w-[60px] md:min-w-[80px]">
-                        <p className="font-bold text-sm md:text-base">GH₵{item.price * item.quantity}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 md:h-8 md:w-8 text-destructive"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <X size={12} className="md:w-3.5 md:h-3.5" />
+      {/* Order Dialog */}
+      <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Place Your Order</DialogTitle>
+            <DialogDescription>
+              Review your cart and provide your contact details for delivery.
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Cart Items */}
+          <div className="space-y-3 md:space-y-4 max-h-[250px] md:max-h-[300px] overflow-y-auto">
+            {cart.map((item) => (
+              <Card key={item.id} className="p-3 md:p-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-sm md:text-base text-primary">{item.name}</h4>
+                    <p className="text-xs md:text-sm text-muted-foreground">{item.priceDisplay} each</p>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                    <div className="flex items-center gap-1 md:gap-2">
+                      <Button variant="outline" size="icon" className="h-7 w-7 md:h-8 md:w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                        <Minus size={12} className="md:w-3.5 md:h-3.5" />
+                      </Button>
+                      <span className="w-6 md:w-8 text-center font-semibold text-sm md:text-base">{item.quantity}</span>
+                      <Button variant="outline" size="icon" className="h-7 w-7 md:h-8 md:w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                        <Plus size={12} className="md:w-3.5 md:h-3.5" />
                       </Button>
                     </div>
+                    <div className="text-right min-w-[60px] md:min-w-[80px]">
+                      <p className="font-bold text-sm md:text-base">GH₵{item.price * item.quantity}</p>
+                    </div>
+                    <Button variant="ghost" size="icon" className="h-7 w-7 md:h-8 md:w-8 text-destructive" onClick={() => removeFromCart(item.id)}>
+                      <X size={12} className="md:w-3.5 md:h-3.5" />
+                    </Button>
                   </div>
-                </Card>
-              ))}
-            </div>
+                </div>
+              </Card>
+            ))}
+          </div>
 
-            {/* Total */}
-            <div className="flex justify-between items-center pt-4 border-t">
-              <span className="text-lg font-semibold">Total:</span>
-              <span className="text-2xl font-bold text-secondary">GH₵{getTotal()}</span>
-            </div>
+          {/* Total */}
+          <div className="flex justify-between items-center pt-4 border-t">
+            <span className="text-lg font-semibold">Total:</span>
+            <span className="text-2xl font-bold text-secondary">GH₵{getTotal()}</span>
+          </div>
 
-            {/* Order Form */}
-            <form onSubmit={handleSubmitOrder} className="space-y-4 pt-4">
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                  Phone Number
-                </label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+233 XX XXX XXXX"
-                  value={orderForm.phone}
-                  onChange={(e) => setOrderForm({ ...orderForm, phone: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="location" className="block text-sm font-medium mb-2">
-                  Delivery Location
-                </label>
-                <Input
-                  id="location"
-                  type="text"
-                  placeholder="Enter your location in Accra"
-                  value={orderForm.location}
-                  onChange={(e) => setOrderForm({ ...orderForm, location: e.target.value })}
-                  required
-                />
-              </div>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setIsOrderDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" variant="cta">
-                  Place Order
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+          {/* Order Form */}
+          <form onSubmit={handleSubmitOrder} className="space-y-4 pt-4">
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium mb-2">Phone Number</label>
+              <Input id="phone" type="tel" placeholder="+233 XX XXX XXXX" value={orderForm.phone} onChange={(e) => setOrderForm({ ...orderForm, phone: e.target.value })} required />
+            </div>
+            <div>
+              <label htmlFor="location" className="block text-sm font-medium mb-2">Delivery Location</label>
+              <Input id="location" type="text" placeholder="Enter your location in Accra" value={orderForm.location} onChange={(e) => setOrderForm({ ...orderForm, location: e.target.value })} required />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsOrderDialogOpen(false)}>Cancel</Button>
+              <Button type="submit" variant="cta">Place Order</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

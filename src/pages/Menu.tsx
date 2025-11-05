@@ -8,7 +8,7 @@ import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import kokoImage from "@/assets/menu-koko.jpg";
 import smoothiesImage from "@/assets/menu-smoothies.jpg";
 import sandwichImage from "@/assets/menu-sandwich.jpg";
-import ReadyEat from "@/assets/ready-eat.jpg";
+import ReadyEat from "@/assets/ready-to-eat.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -126,7 +126,6 @@ const Menu = () => {
 
   const getFilteredItems = () => {
     if (selectedCategory === "cooked") return allMenuItems;
-    // For raw view, same items but emphasize ingredients
     return allMenuItems;
   };
 

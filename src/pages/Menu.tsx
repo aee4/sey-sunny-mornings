@@ -12,6 +12,7 @@ import ReadyEat from "@/assets/ready-to-eat.jpg";
 import RawMaterials from "@/assets/raw-materials.jpg";
 import TombrownClassic from "@/assets/tombrown.jpg";
 import BBSmoothie from "@/assets/bbsmoothie.jpg";
+import TropicalFruitCup from "@/assets/tropical-cup.jpg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -89,7 +90,7 @@ const Menu = () => {
       description: "Fresh mix of pineapple, watermelon, and banana",
       price: 18,
       priceDisplay: "GH₵18",
-      image: sandwichImage,
+      image: TropicalFruitCup,
       ingredients: ["Pineapple", "Watermelon", "Banana"],
     },
   ];

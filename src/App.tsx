@@ -11,7 +11,7 @@ import Menu from "./pages/Menu";
 import About from "./pages/About";
 import Offers from "./pages/Offers";
 import Contact from "./pages/Contact";
-import Recipes from "./pages/Recipes";
+// import Recipes from "./pages/Recipes"; // Hidden for now
 import NotFound from "./pages/NotFound";
 import Quotes from "./pages/Quotes";
 
@@ -33,7 +33,7 @@ const App = () => (
               <Route path="/about" element={<About />} />
               <Route path="/offers" element={<Offers />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/recipes" element={<Recipes />} />
+              {/* <Route path="/recipes" element={<Recipes />} /> */} {/* Hidden for now */}
               <Route path="/quotes" element={<Quotes />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

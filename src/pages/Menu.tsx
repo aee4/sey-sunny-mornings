@@ -15,6 +15,12 @@ import TombrownClassic from "@/assets/tombrown.jpg";
 import BBSmoothie from "@/assets/bbsmoothie.jpg";
 import TropicalCup from "@/assets/tropical-cup.jpg";
 import Oats from "@/assets/oats.jpg";
+import Millet from "@/assets/millet.jpg";
+import firstSmoothie from "@/assets/first smoothie.jpeg";
+import secondSmoothie from "@/assets/second smoothie.jpeg";
+import oatsRaw from "@/assets/oats raw.jpeg";
+import sandwichRaw from "@/assets/sandwich raw.jpeg";
+import TmPowder from "@/assets/tm powder.jpeg";
 import { toast } from "sonner";
 
 interface MenuItem {
@@ -51,7 +57,6 @@ const Menu = () => {
       price: 22,
       priceDisplay: "GH₵22",
       image: kokoImage,
-      ingredients: ["Millet", "Coconut milk", "Water", "Spices", "Sugar (optional)"],
       needsSweetener: true,
     },
     {
@@ -61,7 +66,6 @@ const Menu = () => {
       price: 18,
       priceDisplay: "GH₵18",
       image: TombrownClassic,
-      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices"],
       needsSweetener: true,
     },
     {
@@ -71,7 +75,6 @@ const Menu = () => {
       price: 35,
       priceDisplay: "GH₵35",
       image: smoothiesImage,
-      ingredients: ["Banana", "Oats", "Honey", "Yogurt", "Ice"],
       needsSweetener: true,
     },
     {
@@ -81,7 +84,6 @@ const Menu = () => {
       price: 30,
       priceDisplay: "GH₵30",
       image: BBSmoothie,
-      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey"],
       needsSweetener: true,
     },
     {
@@ -91,7 +93,6 @@ const Menu = () => {
       price: 25,
       priceDisplay: "GH₵25",
       image: sandwichImage,
-      ingredients: ["Wheat bread", "Egg", "Avocado", "Salt", "Pepper"],
       needsSweetener: false,
     },
     {
@@ -101,7 +102,6 @@ const Menu = () => {
       price: 18,
       priceDisplay: "GH₵18",
       image: TropicalCup,
-      ingredients: ["Pineapple", "Watermelon", "Banana"],
       needsSweetener: false,
     },
     {
@@ -111,7 +111,6 @@ const Menu = () => {
       price: 24,
       priceDisplay: "GH₵24",
       image: Oats,
-      ingredients: ["Oats", "Milk", "Water", "Honey", "Cinnamon", "Banana"],
       needsSweetener: true,
     },
   ];
@@ -119,165 +118,66 @@ const Menu = () => {
   const rawMenuItems: MenuItem[] = [
     {
       id: "raw-1",
-      name: "Millet",
-      description: "Premium quality millet grains for porridge",
-      price: 15,
-      priceDisplay: "GH₵15",
-      image: RawMaterials,
-      ingredients: ["Millet grains"],
+      name: "Millet Delight (Koko)",
+      description: "Creamy millet porridge with a coconut milk twist",
+      price: 18,
+      priceDisplay: "GH₵18",
+      image: Millet,
+      ingredients: ["Millet", "Coconut milk", "Water", "Spices", "Sugar (optional)"],
     },
     {
       id: "raw-2",
-      name: "Roasted Corn Powder",
-      description: "Finely ground roasted corn for tombrown",
-      price: 12,
-      priceDisplay: "GH₵12",
-      image: RawMaterials,
-      ingredients: ["Roasted corn powder"],
+      name: "Tombrown Classic",
+      description: "Smooth roasted corn porridge with a touch of milk and spice",
+      price: 14,
+      priceDisplay: "GH₵14",
+      image: TmPowder,
+      ingredients: ["Roasted corn powder", "Milk", "Water", "Spices"],
     },
     {
       id: "raw-3",
-      name: "Banana",
-      description: "Fresh ripe bananas for smoothies and breakfast",
-      price: 8,
-      priceDisplay: "GH₵8",
-      image: RawMaterials,
-      ingredients: ["Fresh bananas"],
+      name: "Morning Glow Smoothie",
+      description: "Banana, oats, and honey blend for natural energy",
+      price: 28,
+      priceDisplay: "GH₵28",
+      image: firstSmoothie,
+      ingredients: ["Banana", "Oats", "Honey", "Yogurt", "Ice"],
     },
     {
       id: "raw-4",
-      name: "Oats",
-      description: "Premium rolled oats for porridge and smoothies",
-      price: 14,
-      priceDisplay: "GH₵14",
-      image: RawMaterials,
-      ingredients: ["Rolled oats"],
+      name: "Berry Burst Smoothie",
+      description: "Strawberries, yogurt, and a hint of vanilla",
+      price: 24,
+      priceDisplay: "GH₵24",
+      image: secondSmoothie,
+      ingredients: ["Strawberries", "Yogurt", "Vanilla", "Honey"],
     },
     {
       id: "raw-5",
-      name: "Honey",
-      description: "Pure natural honey for sweetening",
-      price: 18,
-      priceDisplay: "GH₵18",
-      image: RawMaterials,
-      ingredients: ["Pure honey"],
+      name: "Egg & Avocado Sandwich",
+      description: "Soft wheat bread with boiled egg and avocado",
+      price: 20,
+      priceDisplay: "GH₵20",
+      image: sandwichRaw,
+      ingredients: ["Wheat bread", "Egg", "Avocado", "Salt", "Pepper"],
     },
     {
       id: "raw-6",
-      name: "Yogurt",
-      description: "Fresh creamy yogurt for smoothies",
-      price: 16,
-      priceDisplay: "GH₵16",
-      image: RawMaterials,
-      ingredients: ["Fresh yogurt"],
+      name: "Tropical Fruit Cup",
+      description: "Fresh mix of pineapple, watermelon, and banana",
+      price: 14,
+      priceDisplay: "GH₵14",
+      image: TropicalCup,
+      ingredients: ["Pineapple", "Watermelon", "Banana"],
     },
     {
       id: "raw-7",
-      name: "Strawberries",
-      description: "Fresh strawberries for smoothies",
-      price: 20,
-      priceDisplay: "GH₵20",
-      image: RawMaterials,
-      ingredients: ["Fresh strawberries"],
-    },
-    {
-      id: "raw-8",
-      name: "Vanilla Extract",
-      description: "Pure vanilla extract for flavoring",
-      price: 22,
-      priceDisplay: "GH₵22",
-      image: RawMaterials,
-      ingredients: ["Vanilla extract"],
-    },
-    {
-      id: "raw-9",
-      name: "Wheat Bread",
-      description: "Fresh baked wheat bread",
-      price: 10,
-      priceDisplay: "GH₵10",
-      image: RawMaterials,
-      ingredients: ["Wheat flour", "Yeast", "Water"],
-    },
-    {
-      id: "raw-10",
-      name: "Eggs",
-      description: "Fresh farm eggs",
-      price: 12,
-      priceDisplay: "GH₵12",
-      image: RawMaterials,
-      ingredients: ["Fresh eggs"],
-    },
-    {
-      id: "raw-11",
-      name: "Avocado",
-      description: "Ripe creamy avocados",
-      price: 15,
-      priceDisplay: "GH₵15",
-      image: RawMaterials,
-      ingredients: ["Fresh avocados"],
-    },
-    {
-      id: "raw-12",
-      name: "Salt & Pepper",
-      description: "Fine sea salt and black pepper",
-      price: 5,
-      priceDisplay: "GH₵5",
-      image: RawMaterials,
-      ingredients: ["Sea salt", "Black pepper"],
-    },
-    {
-      id: "raw-13",
-      name: "Pineapple",
-      description: "Fresh sweet pineapple",
-      price: 12,
-      priceDisplay: "GH₵12",
-      image: RawMaterials,
-      ingredients: ["Fresh pineapple"],
-    },
-    {
-      id: "raw-14",
-      name: "Watermelon",
-      description: "Fresh juicy watermelon",
-      price: 10,
-      priceDisplay: "GH₵10",
-      image: RawMaterials,
-      ingredients: ["Fresh watermelon"],
-    },
-    {
-      id: "raw-15",
-      name: "Coconut Milk",
-      description: "Creamy coconut milk for cooking",
-      price: 16,
-      priceDisplay: "GH₵16",
-      image: RawMaterials,
-      ingredients: ["Coconut milk"],
-    },
-    {
-      id: "raw-16",
-      name: "Milk",
-      description: "Fresh whole milk",
-      price: 8,
-      priceDisplay: "GH₵8",
-      image: RawMaterials,
-      ingredients: ["Fresh milk"],
-    },
-    {
-      id: "raw-17",
-      name: "Spices",
-      description: "Assorted spices for flavoring",
-      price: 10,
-      priceDisplay: "GH₵10",
-      image: RawMaterials,
-      ingredients: ["Ginger", "Cinnamon", "Nutmeg"],
-    },
-    {
-      id: "raw-18",
-      name: "Sugar",
-      description: "Granulated sugar for sweetening",
-      price: 6,
-      priceDisplay: "GH₵6",
-      image: RawMaterials,
-      ingredients: ["Granulated sugar"],
+      name: "Oats Porridge",
+      description: "Creamy oats porridge with milk and honey",
+      price: 19,
+      priceDisplay: "GH₵19",
+      image: oatsRaw,
+      ingredients: ["Oats", "Milk", "Water", "Honey", "Cinnamon", "Banana"],
     },
   ];
 
@@ -383,13 +283,13 @@ const Menu = () => {
           <button
             onClick={() => setSelectedCategory("raw")}
             className={`group relative rounded-2xl overflow-hidden h-56 md:h-72 warm-shadow transition-all duration-300 hover:scale-105 ${selectedCategory === "raw" ? "ring-4 ring-secondary scale-105" : ""}`}
-            aria-label="Raw Materials"
+            aria-label="Ingredients"
           >
-            <img src={RawMaterials} alt="Raw materials" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
+            <img src={RawMaterials} alt="Ingredients" className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
             <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
               <div className="text-center text-white drop-shadow-lg">
-                <div className="text-3xl md:text-4xl font-bold mb-2">Raw Materials</div>
+                <div className="text-3xl md:text-4xl font-bold mb-2">Ingredients</div>
                 <div className="text-4xl md:text-5xl mb-3">🥬</div>
                 <div className="text-base md:text-lg opacity-90">Fresh ingredients to cook</div>
               </div>
@@ -456,23 +356,20 @@ const Menu = () => {
   );
 
   const renderRawGrid = () => (
-    <section className="py-12 md:py-16 px-4 bg-yellow-50">
+    <section className="py-12 md:py-16 px-4 bg-amber-50">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Raw Materials</h2>
-        <p className="text-center text-muted-foreground mb-8 md:mb-12">
-          Same delicious meals, showing ingredients for cooking at home
-        </p>
+        <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-8 md:mb-12">Ingredients</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {cookedMenuItems.map((item) => (
+          {rawMenuItems.map((item) => (
             <Card key={item.id} className="group overflow-hidden rounded-2xl warm-shadow hover:shadow-xl transition-smooth">
               <div className="relative">
                 <img src={item.image} alt={item.name} className="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="p-5">
-                <h3 className="text-lg md:text-xl font-semibold text-primary mb-3">{item.name}</h3>
+                <h3 className="text-lg md:text-xl font-semibold text-primary">{item.name}</h3>
                 {item.ingredients && item.ingredients.length > 0 && (
-                  <div className="mb-4">
+                  <div className="mt-3 mb-3">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Ingredients:</p>
                     <ul className="text-sm text-muted-foreground space-y-1.5">
                       {item.ingredients.map((ing, idx) => (
@@ -484,7 +381,7 @@ const Menu = () => {
                     </ul>
                   </div>
                 )}
-                <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                <div className="flex items-center justify-between mt-4">
                   <div className="text-xl md:text-2xl font-bold text-secondary">{item.priceDisplay}</div>
                   <Button variant="cta" size="sm" onClick={() => addToCart(item)} className="gap-2">
                     <Plus size={16} /> Add

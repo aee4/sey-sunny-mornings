@@ -62,6 +62,9 @@ const Footer = () => {
           <p className="text-sm text-primary-foreground/80">
             © 2025 Sey Good Morning | All rights reserved. Designed with love. Served with sunshine.
           </p>
+          <p className="text-sm text-primary-foreground/80 mt-2">
+            Designed by aee4
+          </p>
         </div>
       </div>
     </footer>
